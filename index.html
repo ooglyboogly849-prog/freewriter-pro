@@ -1,0 +1,27 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>FreeWriter Pro</title>
+<style>:root {  --bg: #f4f4f4;  --text: #222;  --accent: #5c6bc0;}
+.dark {  --bg: #121212;  --text: #e0e0e0;  --accent: #7986cb;}
+body {  margin: 0;  font-family: 'Georgia', serif;  background: var(--bg);  color: var(--text);  display: flex;  flex-direction: column;  height: 100vh;}
+header {  background: var(--accent);  color: white;  padding: 12px;  text-align: center;  font-weight: bold;}
+.controls {  display: flex;  flex-wrap: wrap;  gap: 8px;  padding: 10px;  justify-content: center;}
+button, input {  padding: 6px 10px;  border: none;  border-radius: 6px;  font-size: 14px;}
+button {  background: var(--accent);  color: white;  cursor: pointer;}
+textarea {  flex: 1;  padding: 20px;  font-size: 18px;  line-height: 1.6;  border: none;  resize: none;  outline: none;  background: var(--bg);  color: var(--text);}
+.stats {  text-align: center;  padding: 8px;  font-size: 14px;}
+.focus textarea {  font-size: 22px;}</style></head>
+<body>
+<header>FreeWriter Pro</header>
+<div class="controls">  <button onclick="toggleDark()">Dark Mode</button>  <button onclick="toggleFocus()">Focus Mode</button>  <button onclick="downloadText()">Export</button>  <input type="number" id="goalInput" placeholder="Word Goal"></div>
+<textarea id="editor" placeholder="Start writing your masterpiece..."></textarea>
+<div class="stats">  Words: <span id="wordCount">0</span> |  Goal: <span id="goalDisplay">0</span></div>
+<script>const editor = document.getElementById("editor");const wordCount = document.getElementById("wordCount");const goalInput = document.getElementById("goalInput");const goalDisplay = document.getElementById("goalDisplay");
+editor.value = localStorage.getItem("writing") || "";goalInput.value = localStorage.getItem("goal") || "";
+updateStats();
+editor.addEventListener("input", () => {  localStorage.setItem("writing", editor.value);  updateStats();});
+goalInput.addEventListener("input", () => {  localStorage.setItem("goal", goalInput.value);  goalDisplay.textContent = goalInput.value || 0;});
+function updateStats() {  const words = editor.value.trim().split(/\s+/).filter(Boolean).length;  wordCount.textContent = words;  goalDisplay.textContent = goalInput.value || 0;
+  if(goalInput.value && words >= goalInput.value) {    alert("Goal reached! ");  }}
+function toggleDark() {  document.body.classList.toggle("dark");}
+function toggleFocus() {  document.body.classList.toggle("focus");}
+function downloadText() {  const blob = new Blob([editor.value], { type: "text/plain" });  const link = document.createElement("a");  link.href = URL.createObjectURL(blob);  link.download = "my-writing.txt";  link.click();}</script>
+</body></html>
